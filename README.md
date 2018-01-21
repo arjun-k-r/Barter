@@ -1,2 +1,2 @@
-# barter
+# Barter
 android trading app
