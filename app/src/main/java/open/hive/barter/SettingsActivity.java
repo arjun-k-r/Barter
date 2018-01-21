@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import open.hive.barter.classes.UserInfor;
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btnHome;

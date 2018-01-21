@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -58,5 +59,25 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_notification){
+            //open notifications activity
+        }else if (item.getItemId() == R.id.action_list){
+            //open list activity
+            startActivity(new Intent(this, ItemsUploadedActivity.class));
+
+        }else if (item.getItemId() == R.id.action_settings){
+            //open settings activity
+            startActivity(new Intent(this, SettingsActivity.class));
+
+        }else if (item.getItemId() == R.id.action_logout){
+            //logout
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

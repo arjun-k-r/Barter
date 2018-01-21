@@ -2,32 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_refresh"
-        android:icon="@mipmap/ic_restore_white_24dp"
-        android:title="Sell Something"
-        app:showAsAction="always"
-        />
+    <!--<item android:id="@+id/action_refresh"-->
+        <!--android:icon="@mipmap/ic_restore_white_24dp"-->
+        <!--android:title="Sell Something"-->
+        <!--app:showAsAction="always"-->
+        <!--/>-->
     <item android:id="@+id/action_notification"
         android:icon="@mipmap/ic_notifications_white_24dp"
-        android:title="Sell Something"
+        android:title="Notification"
         app:showAsAction="always"
         />
 
-    <item android:id="@+id/action_add"
-        android:icon="@mipmap/ic_add_white_24dp"
-        android:title="Sell Something"
+    <item android:id="@+id/action_list"
+        android:icon="@mipmap/ic_format_list_bulleted_white_24dp"
+        android:title="list"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_logout"
+        android:icon="@mipmap/ic_forward_white_24dp"
+        android:title="Sign out"
         app:showAsAction="always"
         />
 
     <item android:id="@+id/action_settings"
-        android:icon="@mipmap/ic_add_white_24dp"
         android:title="Settings"
-        app:showAsAction="never"
-        />
-
-    <item android:id="@+id/action_logout"
-        android:icon="@mipmap/ic_add_white_24dp"
-        android:title="Sign out"
         app:showAsAction="never"
         />
 
