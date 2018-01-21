@@ -19,7 +19,11 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".UploadActivity"></activity>
+        <activity android:name=".UploadActivity" />
+        <activity
+            android:name=".ItemsUploadedActivity"
+            android:label="@string/title_activity_items_uploaded"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
