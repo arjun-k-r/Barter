@@ -1,6 +1,7 @@
 package open.hive.barter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,7 +66,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        Toast.makeText(this, "signing in", Toast.LENGTH_LONG).show();
+        final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Signing in");
+        pDialog.setCancelable(false);
+        pDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -71,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             //user successfully registered
+                            pDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "signed in successfully", Toast.LENGTH_LONG).show();
                             //open Home activity
                             finish();
