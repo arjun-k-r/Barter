@@ -26,13 +26,6 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sell something"
-            android:id="@+id/btnUploadAct"
-            android:layout_gravity="center"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Logout"
             android:id="@+id/buttonLogout"
             android:layout_gravity="center"/>
