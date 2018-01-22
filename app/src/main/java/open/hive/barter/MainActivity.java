@@ -1,6 +1,7 @@
 package open.hive.barter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -70,7 +73,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        Toast.makeText(this, "registering", Toast.LENGTH_LONG).show();
+        final SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Registering");
+        pDialog.setCancelable(false);
+        pDialog.show();
 //        progressBar.setVisibility(View.VISIBLE);
         firebaseAuth.createUserWithEmailAndPassword(email,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -78,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             //user successfully registered
+                            pDialog.dismiss();
                             Toast.makeText(MainActivity.this, "registered successfully", Toast.LENGTH_LONG).show();
                             //open settings activity
                             startActivity(new Intent(MainActivity.this, SettingsActivity.class));

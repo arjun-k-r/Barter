@@ -18,7 +18,7 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
 
     private TextView textViewUserEmail;
 
-    private Button buttonLogout, btnUploadAct;
+    private Button buttonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,9 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
 
         textViewUserEmail = findViewById(R.id.textViewUserEmail);
         buttonLogout = findViewById(R.id.buttonLogout);
-        btnUploadAct = findViewById(R.id.btnUploadAct);
 
         textViewUserEmail.setText("Welcome "+user.getEmail());
         buttonLogout.setOnClickListener(this);
-        btnUploadAct.setOnClickListener(this);
 
     }
 
@@ -50,8 +48,6 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
             firebaseAuth.signOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
-        }else if (v == btnUploadAct){
-            startActivity(new Intent(this, ItemsUploadedActivity.class));
         }
     }
 
