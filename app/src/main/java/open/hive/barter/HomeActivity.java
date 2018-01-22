@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class HomeActivity extends AppCompatActivity  implements View.OnClickListener{
 
     private FirebaseAuth firebaseAuth;
@@ -72,6 +74,20 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
 
         }else if (item.getItemId() == R.id.action_logout){
             //logout
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Are you sure?")
+                    .setContentText("You'll be logged out!")
+                    .setConfirmText("Yes,log out!")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            firebaseAuth.signOut();
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        }
+                    })
+                    .show();
 
         }
         return super.onOptionsItemSelected(item);

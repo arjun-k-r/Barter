@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         }
                         else {
+                            pDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Could not sign in. Please try again", Toast.LENGTH_LONG).show();
                         }
                     }
