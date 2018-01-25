@@ -69,9 +69,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         if (filepath != null){
 
-            sweetAlertDialog = new SweetAlertDialog(this);
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
             sweetAlertDialog.setTitle("Uploading");
-            sweetAlertDialog.show();
 
             StorageReference riversRef = storageReference.child("images/"+filepath.getLastPathSegment());
 
@@ -96,6 +95,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
                     sweetAlertDialog.setTitleText(((int)progress)+"% uploaded ...");
+                    sweetAlertDialog.show();
                 }
             });
         }else {
