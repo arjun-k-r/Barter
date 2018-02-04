@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -35,6 +38,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private FirebaseAuth firebaseAuth;
     private StorageReference storageReference;
+    private DatabaseReference databaseReference;
+
     private Uri filepath;
 
     private SweetAlertDialog sweetAlertDialog;
@@ -47,7 +52,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        if (firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("posts");
 
         imgSelector = findViewById(R.id.imgSelector);
         etTitle = findViewById(R.id.etTitle);
@@ -65,7 +77,22 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         startActivityForResult(Intent.createChooser(intent, "Select an image"), PICK_IMAGE_REQUEST);
     }
 
-    private void uploadFile(){
+    private void uploadPost(){
+
+        String title = etTitle.getText().toString().trim();
+        String desc = etDesc.getText().toString().trim();
+
+        if (TextUtils.isEmpty(title)){
+            //check if email field is empty
+            Toast.makeText(this, "please add a title", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(desc)){
+            //check if password field is empty
+            Toast.makeText(this, "please add a description", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         if (filepath != null){
 
@@ -85,9 +112,19 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                    DatabaseReference newPost = databaseReference.push();
+                    newPost.child("title").setValue(etTitle.getText().toString());
+                    newPost.child("desc").setValue(etDesc.getText().toString());
+                    newPost.child("image").setValue(downloadUrl.toString());
+
                     // Handle successful uploads
                     sweetAlertDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getApplicationContext(), ItemsUploadedActivity.class));
+
                 }
             })
             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -104,6 +141,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -128,7 +166,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             showFileSelector();
         }else if (v == btnUpload){
             //upload image to cloud storage
-            uploadFile();
+            uploadPost();
         }
     }
 }

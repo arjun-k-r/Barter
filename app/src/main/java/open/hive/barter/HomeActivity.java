@@ -1,26 +1,36 @@
 package open.hive.barter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import open.hive.barter.classes.Barter;
 
 public class HomeActivity extends AppCompatActivity  implements View.OnClickListener{
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
-    private TextView textViewUserEmail;
-
-    private Button buttonLogout;
+    private RecyclerView itemFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +38,7 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
         setContentView(R.layout.activity_home);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Barter");
 
         if (firebaseAuth.getCurrentUser() == null){
             finish();
@@ -36,21 +47,82 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        textViewUserEmail = findViewById(R.id.textViewUserEmail);
-        buttonLogout = findViewById(R.id.buttonLogout);
-
-        textViewUserEmail.setText("Welcome "+user.getEmail());
-        buttonLogout.setOnClickListener(this);
+        itemFeed = findViewById(R.id.itemFeed);
+        itemFeed.setHasFixedSize(true);
+        itemFeed.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == buttonLogout){
-            firebaseAuth.signOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
+    protected void onStart() {
+        super.onStart();
+
+//        FirebaseRecyclerAdapter<Barter, BarterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Barter, BarterViewHolder>(
+//                Barter.class,
+//                R.layout.item_feed,
+//                BarterViewHolder.class,
+//                databaseReference
+//        ) {
+//            @Override
+//            protected void populateViewHolder(BarterViewHolder viewHolder, Barter model, int position) {
+//
+//                viewHolder.setTitle(model.getTitle());
+//                viewHolder.setDesc(model.getDesc());
+//                viewHolder.setImage(getApplicationContext(), model.getImage());
+//
+//            }
+//        };
+//        FirebaseRecyclerAdapter<Barter, BarterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Barter, BarterViewHolder>(Barter.class,R.layout.item_feed,BarterViewHolder.class,databaseReference) {
+//            @Override
+//            protected void onBindViewHolder(@NonNull BarterViewHolder holder, int position, @NonNull Barter model) {
+//
+//            }
+//
+//            @Override
+//            public BarterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//                return null;
+//            }
+//        };
+
+//        firebaseRecyclerAdapter.notifyDataSetChanged();
+//        itemFeed.setAdapter(firebaseRecyclerAdapter);
+
+        
+
+
+    }
+
+    public static class BarterViewHolder extends RecyclerView.ViewHolder{
+
+        View item_view;
+
+        public BarterViewHolder(View itemView) {
+            super(itemView);
+
+            item_view = itemView;
         }
+
+        public void setTitle(String title){
+
+            TextView item_title = item_view.findViewById(R.id.itemTitle);
+            item_title.setText(title);
+        }
+
+        public void setDesc(String desc){
+
+            TextView item_desc = item_view.findViewById(R.id.itemDesc);
+            item_desc.setText(desc);
+        }
+
+        public void setImage(Context ctx, String image){
+            ImageView item_img = item_view.findViewById(R.id.itemImg);
+            Picasso.with(ctx).load(image).into(item_img);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     @Override
