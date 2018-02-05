@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "677595434898-ub84v33p0nj0vpgge2585nvtkcvmjmbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "open.hive.barter",
+            "certificate_hash": "9a0a27fbc6ca51c2ea6593ef7856b36eb5b6c1fc"
+          }
+        },
+        {
           "client_id": "677595434898-co3f2dkltoktfn9sv54igtk7v2sv0568.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677595434898-co3f2dkltoktfn9sv54igtk7v2sv0568.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

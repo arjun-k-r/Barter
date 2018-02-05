@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -31,6 +34,7 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
     private DatabaseReference databaseReference;
 
     private RecyclerView itemFeed;
+    private FirebaseRecyclerAdapter<Barter, BarterViewHolder> firebaseRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +55,35 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
         itemFeed.setHasFixedSize(true);
         itemFeed.setLayoutManager(new LinearLayoutManager(this));
 
+        Query databaseQuery = databaseReference.orderByKey();
+        FirebaseRecyclerOptions databaseOptions = new FirebaseRecyclerOptions.Builder<Barter>().setQuery(databaseQuery, Barter.class).build();
+
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Barter, BarterViewHolder>(databaseOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull BarterViewHolder holder, int position, @NonNull Barter model) {
+
+                holder.setTitle(model.getTitle());
+                holder.setDesc(model.getDesc());
+                holder.setImage(getApplication(), model.getImage());
+
+            }
+
+            @Override
+            public BarterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_feed, parent, false);
+                return new BarterViewHolder(view);
+            }
+        };
+        itemFeed.setAdapter(firebaseRecyclerAdapter);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        firebaseRecyclerAdapter.startListening();
 
 //        FirebaseRecyclerAdapter<Barter, BarterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Barter, BarterViewHolder>(
 //                Barter.class,
@@ -87,9 +115,12 @@ public class HomeActivity extends AppCompatActivity  implements View.OnClickList
 //        firebaseRecyclerAdapter.notifyDataSetChanged();
 //        itemFeed.setAdapter(firebaseRecyclerAdapter);
 
-        
+    }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseRecyclerAdapter.startListening();
     }
 
     public static class BarterViewHolder extends RecyclerView.ViewHolder{
